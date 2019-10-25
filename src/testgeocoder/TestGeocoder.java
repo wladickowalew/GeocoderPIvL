@@ -30,7 +30,7 @@ public class TestGeocoder {
                         
     
     private static String getKey(){
-        return "a880cf10-7c51-4526-9e32-517f6e45c777";
+        return "";
     }
     
     public static String getGeocoder(String url) throws Exception{
