@@ -1,27 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package testgeocoder;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Student
- */
 public class TestGeocoder {
-
     
-    public static void main(String[] args) {
+    public static void main(String[] args){
         try {
             String address = "Смоленск, Седова, 24А";
             String server = "https://geocode-maps.yandex.ru/1.x/";
@@ -29,22 +21,24 @@ public class TestGeocoder {
                     "&geocode="+URLEncoder.encode(address,"UTF-8")+
                     "&apikey="+URLEncoder.encode(getKey(),"UTF-8");
             String URL = server + "?" + params;
-            getGeocoder(URL);
+            System.out.println("URL : " + URL);
+            System.out.println("JSON: " + getGeocoder(URL));
         } catch (Exception ex) {
-            System.out.println("Error");
+            Logger.getLogger(TestGeocoder.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+                        
     
     private static String getKey(){
-        return "";
+        return "a880cf10-7c51-4526-9e32-517f6e45c777";
     }
     
-    public static void getGeocoder(String url) throws Exception{
+    public static String getGeocoder(String url) throws Exception{
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection)obj.openConnection();
         con.setRequestMethod("GET");
         InputStreamReader stream = 
-                new InputStreamReader(con.getInputStream());
+                new InputStreamReader(con.getInputStream()); 
         BufferedReader in = new BufferedReader(stream);
         String tmp;
         StringBuffer response = new StringBuffer();
@@ -54,7 +48,7 @@ public class TestGeocoder {
         }
         in.close();
         stream.close();
-        System.out.println(response.toString());
+        return response.toString();
     }
     
 }
