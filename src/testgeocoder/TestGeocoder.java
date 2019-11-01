@@ -27,10 +27,13 @@ public class TestGeocoder {
             Logger.getLogger(TestGeocoder.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-                        
+     
+    public static String getURL(String address){
+        
+    }
     
     private static String getKey(){
-        return "";
+        return "a880cf10-7c51-4526-9e32-517f6e45c777";
     }
     
     public static String getGeocoder(String url) throws Exception{
