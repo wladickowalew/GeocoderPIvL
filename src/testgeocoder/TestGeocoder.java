@@ -10,26 +10,50 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class TestGeocoder {
     
     public static void main(String[] args){
         try {
-            String address = "Смоленск, Седова, 24А";
-            String server = "https://geocode-maps.yandex.ru/1.x/";
-            String params = "format=json" +
-                    "&geocode="+URLEncoder.encode(address,"UTF-8")+
-                    "&apikey="+URLEncoder.encode(getKey(),"UTF-8");
-            String URL = server + "?" + params;
+            String address = "Улица ленина";
+            String URL = getURL(address);
             System.out.println("URL : " + URL);
-            System.out.println("JSON: " + getGeocoder(URL));
+            String JSONString = getGeocoder(URL);
+            System.out.println("JSON: " + JSONString);
+            parseJSON(JSONString);
         } catch (Exception ex) {
             Logger.getLogger(TestGeocoder.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static void parseJSON(String jsonString) throws JSONException{
+        JSONObject obj = new JSONObject(jsonString);
+        JSONObject res = obj.getJSONObject("response");
+        JSONObject GOC = res.getJSONObject("GeoObjectCollection");
+        JSONArray jarray = GOC.getJSONArray("featureMember");
+        for (int i = 0; i < jarray.length();i++){
+            JSONObject element = jarray.getJSONObject(i);
+            JSONObject geoObj = element.getJSONObject("GeoObject");
+            String name = geoObj.getString("name");
+            String descr = geoObj.getString("description");
+            JSONObject point = geoObj.getJSONObject("Point");
+            String pos = point.getString("pos");
+            String line = name+" "+descr
+                                    +" coords: "+pos;
+            System.out.println(line);
+        }
+    }
      
-    public static String getURL(String address){
-        
+    public static String getURL(String address) throws UnsupportedEncodingException{
+        String server = "https://geocode-maps.yandex.ru/1.x/";
+        String params = "format=json" +
+                        "&results=100" +
+                    "&geocode="+URLEncoder.encode(address,"UTF-8")+
+                    "&apikey="+URLEncoder.encode(getKey(),"UTF-8");
+        return server + "?" + params;
     }
     
     private static String getKey(){
