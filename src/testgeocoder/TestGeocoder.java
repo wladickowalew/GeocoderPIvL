@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.JSONArray;
@@ -17,6 +18,9 @@ import org.json.JSONObject;
 public class TestGeocoder {
     
     public static void main(String[] args){
+        GeocoderForm form = new GeocoderForm();
+        form.setVisible(true);
+        /*
         try {
             String address = "Улица ленина";
             String URL = getURL(address);
@@ -27,9 +31,11 @@ public class TestGeocoder {
         } catch (Exception ex) {
             Logger.getLogger(TestGeocoder.class.getName()).log(Level.SEVERE, null, ex);
         }
+        */
     }
     
-    public static void parseJSON(String jsonString) throws JSONException{
+    public static ArrayList<String> parseJSON(String jsonString) throws JSONException{
+        ArrayList<String> list = new ArrayList<>();
         JSONObject obj = new JSONObject(jsonString);
         JSONObject res = obj.getJSONObject("response");
         JSONObject GOC = res.getJSONObject("GeoObjectCollection");
@@ -44,7 +50,9 @@ public class TestGeocoder {
             String line = name+" "+descr
                                     +" coords: "+pos;
             System.out.println(line);
+            list.add(line);
         }
+        return list;
     }
      
     public static String getURL(String address) throws UnsupportedEncodingException{
